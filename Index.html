@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreisingerS Pizzas Burgers | Cardápio & Delivery</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#F59E0B',
+                            red: '#DC2626',
+                            redHover: '#B91C1C',
+                            dark: '#111827',
+                            card: '#1F2937',
+                            cardHover: '#374151'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- QR Code Generator JS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .animated-badge {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-brand-gold selection:text-black pb-20 md:pb-0">
+
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- LOGO & BRAND -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="filterCategory('todos')">
+                    <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-brand-gold shadow-lg shadow-brand-red/30 shrink-0 bg-slate-800 flex items-center justify-center">
+                        <img src="https://uploads.onecompiler.io/43vaday7q/1792605492172/Pizzaria.jpg" alt="Logo FreisingerS" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-pizza-slice text-brand-gold text-xl\'></i>';">
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                            FreisingerS
+                            <span class="text-xs bg-brand-gold/20 text-brand-gold border border-brand-gold/30 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider hidden sm:inline-block">Pizzas & Burgers</span>
+                        </h1>
+                        <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                            <span id="storeStatusBadge" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                            <span id="storeStatusText" class="font-semibold text-emerald-400">Aberto Agora</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="flex items-center gap-3">
+                    <!-- BOTÃO DO CARRINHO -->
+                    <button onclick="openCartModal()" class="relative bg-gradient-to-r from-brand-red to-brand-redHover hover:opacity-95 text-white font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-brand-red/20 transition flex items-center gap-2.5 text-sm">
+                        <i class="fa-solid fa-basket-shopping text-lg"></i>
+                        <span class="hidden sm:inline">Carrinho</span>
+                        <span id="cartCountBadge" class="bg-brand-gold text-slate-950 font-black text-xs w-6 h-6 rounded-full flex items-center justify-center shadow-md">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- STORE INFO BANNER -->
+    <section class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-800/80 py-4 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs sm:text-sm text-slate-300">
+            <div class="flex items-center gap-2 text-center md:text-left">
+                <i class="fa-solid fa-location-dot text-brand-gold text-base shrink-0"></i>
+                <span>R. Prof. Otávio Guimarães, 319 - Jardim dos Lagos, São Paulo - SP</span>
+            </div>
+            <div class="flex items-center gap-4 text-slate-400">
+                <a href="https://wa.me/5511959884871" target="_blank" class="hover:text-emerald-400 transition flex items-center gap-1.5 font-medium">
+                    <i class="fa-brands fa-whatsapp text-emerald-500 text-base"></i> +55 11 95988-4871
+                </a>
+                <span class="hidden sm:inline">•</span>
+                <span class="flex items-center gap-1"><i class="fa-solid fa-clock text-brand-gold"></i> 19:00 - 23:59</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROMOTIONS HERO BANNER WITH CAROUSEL -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-red-950 via-slate-900 to-amber-950 border border-brand-red/30 shadow-2xl p-6 sm:p-10">
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-red/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-10 -top-10 w-64 h-64 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="space-y-3 text-center lg:text-left max-w-xl">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-brand-gold/20 text-brand-gold border border-brand-gold/40 animated-badge">
+                        <i class="fa-solid fa-fire"></i> OFERTAS IMPERDÍVEIS HOJE
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight">
+                        Pizzas Artesanais & Hambúrgueres Suculentos!
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base">
+                        Aproveite nossos combos especiais com descontos exclusivos. Peça online e receba quentinho em casa!
+                    </p>
+                    <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                        <button onclick="filterCategory('promocoes')" class="bg-brand-gold hover:bg-amber-500 text-slate-950 font-extrabold px-6 py-3 rounded-xl transition shadow-lg shadow-brand-gold/20 flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-bolt"></i> Ver Promoções
+                        </button>
+                    </div>
+                </div>
+
+                <!-- IMAGE CAROUSEL FOR PROMOTIONS -->
+                <div class="w-full lg:w-96 shrink-0 relative">
+                    <div id="promoCarouselWrapper" class="relative rounded-2xl overflow-hidden bg-slate-900 border border-brand-red/40 shadow-2xl h-64 sm:h-72">
+                        <div id="carouselSlides" class="flex transition-transform duration-500 ease-out h-full"></div>
+                        <button onclick="prevPromoSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition z-10">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        </button>
+                        <button onclick="nextPromoSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition z-10">
+                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        </button>
+                        <div id="carouselIndicators" class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        <div class="space-y-6 mb-8">
+            <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 hide-scrollbar" id="categoryTabs">
+                    <button onclick="filterCategory('todos')" data-cat="todos" class="cat-btn active px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-brand-red text-white shadow-md">
+                        <i class="fa-solid fa-utensils me-1"></i> Todos
+                    </button>
+                    <button onclick="filterCategory('promocoes')" data-cat="promocoes" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-tags me-1 text-brand-gold"></i> Promoções
+                    </button>
+                    <button onclick="filterCategory('burguer_artesanal')" data-cat="burguer_artesanal" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-burger me-1 text-orange-500"></i> Burguer Artesanal
+                    </button>
+                    <button onclick="filterCategory('burguer_duplo')" data-cat="burguer_duplo" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-layer-group me-1 text-red-500"></i> Burguer Duplo
+                    </button>
+                    <button onclick="filterCategory('pizza_tradicional')" data-cat="pizza_tradicional" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-pizza-slice me-1 text-amber-500"></i> Pizza Tradicional
+                    </button>
+                    <button onclick="filterCategory('pizza_especial')" data-cat="pizza_especial" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-crown me-1 text-yellow-400"></i> Pizza Especial
+                    </button>
+                    <button onclick="filterCategory('pizza_doce')" data-cat="pizza_doce" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-candy-cane me-1 text-pink-400"></i> Pizza Doce
+                    </button>
+                    <button onclick="filterCategory('pizza_frita')" data-cat="pizza_frita" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-fire-burner me-1 text-amber-600"></i> Pizza Frita
+                    </button>
+                    <button onclick="filterCategory('beirute')" data-cat="beirute" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-bread-slice me-1 text-yellow-600"></i> Beirute
+                    </button>
+                    <button onclick="filterCategory('calzone')" data-cat="calzone" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-moon me-1 text-amber-300"></i> Calzone
+                    </button>
+                    <button onclick="filterCategory('acompanhamento')" data-cat="acompanhamento" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-box me-1 text-yellow-500"></i> Acompanhamento
+                    </button>
+                    <button onclick="filterCategory('bebidas')" data-cat="bebidas" class="cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                        <i class="fa-solid fa-bottle-water me-1 text-blue-400"></i> Bebidas
+                    </button>
+                </div>
+
+                <div class="relative w-full sm:w-72 shrink-0">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Buscar produto..." class="w-full bg-slate-800/90 border border-slate-700 text-white rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                </div>
+            </div>
+        </div>
+
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
+        <div id="emptyState" class="hidden text-center py-16 space-y-4">
+            <div class="w-20 h-20 mx-auto rounded-full bg-slate-800 flex items-center justify-center text-slate-500 text-3xl">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-300">Nenhum produto encontrado</h3>
+            <p class="text-slate-500 text-sm max-w-sm mx-auto">Tente buscar por outro termo ou escolha uma categoria diferente.</p>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 py-10 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left text-sm">
+            <div class="flex items-center gap-3">
+                <img src="https://uploads.onecompiler.io/43vaday7q/1792605492172/Pizzaria.jpg" alt="Logo FreisingerS" class="w-10 h-10 rounded-full object-cover border border-brand-gold" onerror="this.style.display='none';">
+                <div>
+                    <div class="flex items-center justify-center md:justify-start gap-2 font-bold text-white text-lg mb-0.5">
+                        FreisingerS Pizzas Burgers
+                    </div>
+                    <p class="text-xs text-slate-500">Sabor inigualável e entrega rápida na sua região.</p>
+                </div>
+            </div>
+            <div class="text-xs space-y-1 text-slate-400">
+                <p><i class="fa-solid fa-location-dot text-brand-gold me-1"></i> R. Prof. Otávio Guimarães, 319 - Jardim dos Lagos, São Paulo - SP</p>
+                <p><i class="fa-brands fa-whatsapp text-emerald-500 me-1"></i> WhatsApp: +55 11 95988-4871</p>
+            </div>
+            <div class="flex flex-col items-center md:items-end gap-1">
+                <p class="text-xs text-slate-600">&copy; <span id="year"></span> FreisingerS. Todos os direitos reservados.</p>
+                <button onclick="toggleAdminModal(true)" class="text-[10px] text-slate-600 hover:text-slate-400 transition">Área Restrita</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MOBILE FLOATING CART -->
+    <div class="fixed bottom-0 left-0 right-0 z-30 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-3 md:hidden shadow-2xl flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="relative">
+                <i class="fa-solid fa-basket-shopping text-2xl text-brand-gold"></i>
+                <span id="mobileCartCount" class="absolute -top-2 -right-2 bg-brand-red text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+            </div>
+            <div>
+                <span class="text-xs text-slate-400 block">Total do Pedido</span>
+                <span id="mobileCartTotal" class="text-base font-extrabold text-emerald-400">R$ 0,00</span>
+            </div>
+        </div>
+        <button onclick="openCartModal()" class="bg-brand-red hover:bg-brand-redHover text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-md flex items-center gap-2">
+            Ver Carrinho <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- MODAL: PRODUCT CUSTOMIZATION -->
+    <div id="productModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
+            <div class="relative h-48 sm:h-56 w-full bg-slate-800">
+                <img id="modalImg" src="" alt="Produto" class="w-full h-full object-cover">
+                <button onclick="closeProductModal()" class="absolute top-3 right-3 bg-black/60 hover:bg-black text-white w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div id="modalPromoBadge" class="absolute top-3 left-3 bg-brand-red text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider hidden shadow-lg">
+                    PROMOÇÃO
+                </div>
+            </div>
+
+            <div class="p-6 overflow-y-auto flex-grow space-y-4">
+                <div>
+                    <h3 id="modalTitle" class="text-xl font-bold text-white"></h3>
+                    <p id="modalDescription" class="text-slate-400 text-sm mt-1"></p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <span id="modalPrice" class="text-2xl font-black text-emerald-400"></span>
+                    <span id="modalOldPrice" class="text-sm text-slate-500 line-through hidden"></span>
+                </div>
+
+                <div id="modalCustomizationOptions" class="space-y-4 pt-2 border-t border-slate-800"></div>
+
+                <div class="space-y-1.5 pt-2">
+                    <label class="text-xs font-semibold text-slate-300">Observações do Item</label>
+                    <textarea id="modalObs" rows="2" placeholder="Ex: Sem cebola, caprichar na maionese..." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-gold"></textarea>
+                </div>
+            </div>
+
+            <div class="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-4">
+                <div class="flex items-center bg-slate-800 border border-slate-700 rounded-xl p-1">
+                    <button onclick="adjustModalQty(-1)" class="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold flex items-center justify-center transition">-</button>
+                    <span id="modalQty" class="w-10 text-center font-bold text-white text-sm">1</span>
+                    <button onclick="adjustModalQty(1)" class="w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-bold flex items-center justify-center transition">+</button>
+                </div>
+
+                <button onclick="confirmAddToCart()" class="flex-grow bg-brand-red hover:bg-brand-redHover text-white font-bold py-3 px-4 rounded-xl text-sm shadow-lg flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-cart-plus"></i> Adicionar <span id="modalTotalAdd">R$ 0,00</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CART & CHECKOUT -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl max-h-[95vh] flex flex-col">
+            <div class="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/80">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-brand-gold"></i> Meu Pedido
+                </h3>
+                <button onclick="closeCartModal()" class="text-slate-400 hover:text-white p-2 text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-4 sm:p-6 overflow-y-auto flex-grow space-y-6">
+                <div id="cartItemsList" class="space-y-3"></div>
+
+                <div id="cartEmptyMessage" class="text-center py-8 space-y-2 hidden">
+                    <i class="fa-solid fa-cart-flatbed text-4xl text-slate-600"></i>
+                    <p class="text-slate-400 text-sm font-medium">Seu carrinho está vazio.</p>
+                </div>
+
+                <div id="checkoutFormSection" class="space-y-5 pt-4 border-t border-slate-800">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Tipo de Entrega</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer border border-slate-700 bg-slate-800 p-3 rounded-xl flex items-center gap-3 hover:border-brand-gold transition text-sm">
+                                <input type="radio" name="orderType" value="delivery" checked onchange="toggleDeliveryType('delivery')" class="accent-brand-red">
+                                <div>
+                                    <span class="font-bold text-white block">Entrega</span>
+                                    <span class="text-xs text-slate-400">Receber em casa (+R$ 7,00)</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer border border-slate-700 bg-slate-800 p-3 rounded-xl flex items-center gap-3 hover:border-brand-gold transition text-sm">
+                                <input type="radio" name="orderType" value="pickup" onchange="toggleDeliveryType('pickup')" class="accent-brand-red">
+                                <div>
+                                    <span class="font-bold text-white block">Retirada</span>
+                                    <span class="text-xs text-slate-400">Buscar no local (Grátis)</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Dados do Cliente</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="text" id="custName" placeholder="Seu Nome *" class="bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+                            <input type="tel" id="custPhone" placeholder="WhatsApp / Telefone *" class="bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+                        </div>
+
+                        <div id="addressFields" class="space-y-3">
+                            <input type="text" id="custStreet" placeholder="Endereço (Rua, Av, Número) *" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="text" id="custNeighborhood" placeholder="Bairro *" class="bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+                                <input type="text" id="custComplement" placeholder="Complemento / Ref." class="bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Forma de Pagamento</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer border border-slate-700 bg-slate-800 p-3 rounded-xl flex items-center gap-2 hover:border-brand-gold transition text-xs font-bold text-white">
+                                <input type="radio" name="payMethod" value="pix" checked onchange="togglePaymentMethod('pix')" class="accent-brand-red">
+                                <i class="fa-solid fa-qrcode text-emerald-400 text-base"></i> Pix (Instantâneo)
+                            </label>
+                            <label class="cursor-pointer border border-slate-700 bg-slate-800 p-3 rounded-xl flex items-center gap-2 hover:border-brand-gold transition text-xs font-bold text-white">
+                                <input type="radio" name="payMethod" value="money" onchange="togglePaymentMethod('money')" class="accent-brand-red">
+                                <i class="fa-solid fa-money-bill-wave text-amber-400 text-base"></i> Dinheiro
+                            </label>
+                        </div>
+
+                        <div id="changeField" class="hidden pt-1">
+                            <label class="text-xs text-slate-400 block mb-1">Precisa de troco para quanto?</label>
+                            <input type="text" id="custChange" placeholder="Ex: Troco para R$ 100,00 ou Não preciso" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-brand-gold">
+                        </div>
+
+                        <div id="pixInfoBox" class="p-4 bg-emerald-950/40 border border-emerald-800/50 rounded-xl flex flex-col items-center gap-3 text-center">
+                            <div id="pixQrCode" class="p-2 bg-white rounded-xl shadow-md"></div>
+                            <div>
+                                <p class="text-xs font-bold text-emerald-400">Escaneie o QR Code ou use o Pix Copia e Cola:</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Chave Pix CNPJ: 11.959.884/0001-87 (FreisingerS)</p>
+                            </div>
+                            <button onclick="copyPixKey()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-lg transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-copy"></i> Copiar Código Pix
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cartFooter" class="p-4 sm:p-5 bg-slate-900 border-t border-slate-800 space-y-3">
+                <div class="space-y-1 text-xs text-slate-400">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal" class="font-medium text-white">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Taxa de Entrega</span>
+                        <span id="summaryDeliveryFee" class="font-medium text-white">R$ 7,00</span>
+                    </div>
+                    <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+                        <span>Total Geral</span>
+                        <span id="summaryTotal" class="text-emerald-400">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <button onclick="submitOrderToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3.5 px-4 rounded-xl text-sm shadow-xl flex items-center justify-center gap-2 transition">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Enviar Pedido no WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADMIN & COURIER PANEL -->
+    <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 hidden">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl max-h-[92vh] flex flex-col">
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-brand-gold/20 border border-brand-gold/40 flex items-center justify-center text-brand-gold font-bold">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 id="panelHeaderTitle" class="text-lg font-bold text-white">Painel de Acesso</h3>
+                        <p id="panelHeaderSubtitle" class="text-xs text-slate-400">Entre com sua senha autorizada</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="logoutBtn" onclick="logoutSession()" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 transition flex items-center gap-1.5 hidden" title="Sair do painel">
+                        <i class="fa-solid fa-right-from-bracket"></i> Sair
+                    </button>
+                    <button onclick="toggleAdminModal(false)" class="text-slate-400 hover:text-white p-2 text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- AUTH SELECTION VIEW -->
+            <div id="adminAuthView" class="p-8 max-w-md mx-auto w-full text-center space-y-4 my-auto">
+                <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-brand-gold text-2xl">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h4 class="text-lg font-bold text-white">Acesso Restrito</h4>
+                <p class="text-slate-400 text-xs">Digite sua senha de Administrador ou Entregador para continuar:</p>
+                <input type="password" id="adminPasswordInput" placeholder="Senha de Acesso" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-center text-sm text-white focus:outline-none focus:border-brand-gold">
+                <button onclick="loginPanel()" class="w-full bg-brand-gold hover:bg-amber-500 text-slate-950 font-bold py-3 rounded-xl text-sm transition">
+                    Entrar no Painel
+                </button>
+            </div>
+
+            <!-- COURIER DASHBOARD VIEW -->
+            <div id="courierDashboardView" class="p-6 overflow-y-auto flex-grow space-y-6 hidden">
+                <div class="bg-slate-800/40 border border-slate-800 p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <h4 class="font-bold text-white text-sm">Fila de Entregas</h4>
+                        <p class="text-xs text-slate-400">Acompanhe os pedidos e atualize o status após entregar ou cancelar</p>
+                    </div>
+                    <span class="text-xs font-bold bg-emerald-950 text-emerald-400 border border-emerald-800/60 px-3 py-1 rounded-full">Modo Entregador</span>
+                </div>
+                <div class="space-y-3">
+                    <div id="courierOrdersList" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <!-- ADMIN DASHBOARD VIEW -->
+            <div id="adminDashboardView" class="p-6 overflow-y-auto flex-grow space-y-6 hidden">
+                <div class="flex items-center gap-2 border-b border-slate-800 pb-3">
+                    <button onclick="switchAdminTab('orders')" id="tabOrdersBtn" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-brand-gold text-slate-950">
+                        <i class="fa-solid fa-receipt me-1.5"></i> Pedidos, Caixa & Dados do Cliente
+                    </button>
+                    <button onclick="switchAdminTab('products')" id="tabProductsBtn" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-800 text-slate-300 hover:bg-slate-700">
+                        <i class="fa-solid fa-boxes-stacked me-1.5"></i> Cardápio & Produtos
+                    </button>
+                </div>
+
+                <div id="adminOrdersTabContent" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-4 bg-slate-800/80 border border-slate-700/80 rounded-2xl flex flex-col justify-between">
+                            <span class="text-xs text-slate-400 font-semibold block mb-1">Status da Loja</span>
+                            <button id="toggleStoreStatusBtn" onclick="toggleStoreStatus()" class="w-full py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-emerald-600 text-white">
+                                <i class="fa-solid fa-store"></i> Loja Aberta
+                            </button>
+                        </div>
+                        <div class="p-4 bg-slate-800/80 border border-slate-700/80 rounded-2xl">
+                            <span class="text-xs text-slate-400 font-semibold block mb-1">Total Concluído (Caixa)</span>
+                            <span id="totalSalesAmount" class="text-xl font-black text-emerald-400">R$ 0,00</span>
+                            <span id="completedCount" class="text-[10px] text-slate-400 block mt-0.5">0 pedido(s) concluído(s)</span>
+                        </div>
+                        <div class="p-4 bg-slate-800/80 border border-slate-700/80 rounded-2xl">
+                            <span class="text-xs text-slate-400 font-semibold block mb-1">Resumo por Pagamento</span>
+                            <div class="text-xs space-y-0.5 text-slate-300">
+                                <p class="flex justify-between"><span>Pix:</span> <strong id="pixSalesTotal" class="text-white">R$ 0,00</strong></p>
+                                <p class="flex justify-between"><span>Dinheiro:</span> <strong id="moneySalesTotal" class="text-white">R$ 0,00</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-white text-sm">Histórico de Pedidos e Dados dos Clientes</h4>
+                            <div class="flex gap-2">
+                                <button onclick="filterOrdersHistory('todos')" class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300">Todos</button>
+                                <button onclick="filterOrdersHistory('pendente')" class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-amber-950/60 border border-amber-800/50 text-amber-400">Pendentes</button>
+                                <button onclick="filterOrdersHistory('concluido')" class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-800/50 text-emerald-400">Concluídos</button>
+                                <button onclick="filterOrdersHistory('cancelado')" class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-red-950/60 border border-red-800/50 text-red-400">Cancelados</button>
+                            </div>
+                        </div>
+                        <div id="adminOrdersList" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div id="adminProductsTabContent" class="space-y-6 hidden">
+                    <div class="bg-slate-800/50 border border-slate-800 p-5 rounded-2xl space-y-4">
+                        <h4 id="adminFormTitle" class="font-bold text-white text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-plus text-brand-gold"></i> Adicionar Novo Produto
+                        </h4>
+                        <input type="hidden" id="editProductId">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="text" id="prodName" placeholder="Nome do Produto *" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-brand-gold">
+                            <select id="prodCategory" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-brand-gold">
+                                <option value="burguer_artesanal">Hamburguer Artesanal</option>
+                                <option value="burguer_duplo">Hamburguer Duplo</option>
+                                <option value="pizza_tradicional">Pizza Tradicional</option>
+                                <option value="pizza_especial">Pizza Especial</option>
+                                <option value="pizza_doce">Pizza Doce</option>
+                                <option value="pizza_frita">Pizza Frita</option>
+                                <option value="beirute">Beirute</option>
+                                <option value="calzone">Calzone</option>
+                                <option value="acompanhamento">Acompanhamento</option>
+                                <option value="bebidas">Bebidas</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="number" step="0.01" id="prodPrice" placeholder="Preço Atual (R$) *" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-brand-gold">
+                            <input type="number" step="0.01" id="prodOldPrice" placeholder="Preço Antigo (R$)" class="bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-brand-gold">
+                        </div>
+
+                        <!-- ADICIONADO: Seleção de foto direto do arquivo do computador -->
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-semibold text-slate-300 block"><i class="fa-solid fa-image text-brand-gold me-1"></i> Foto do Produto (Selecione do Arquivo)</label>
+                            <input type="file" id="prodImageFile" accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2 text-xs text-slate-300 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-gold file:text-slate-950 hover:file:bg-amber-500 cursor-pointer">
+                            <input type="hidden" id="prodImageBase64">
+                        </div>
+
+                        <textarea id="prodDescription" rows="2" placeholder="Descrição do produto..." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-brand-gold"></textarea>
+
+                        <div class="flex items-center gap-6 pt-1">
+                            <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-300">
+                                <input type="checkbox" id="prodIsPromo" class="accent-brand-red w-4 h-4 rounded"> Destacar como Promoção
+                            </label>
+                        </div>
+
+                        <div class="flex items-center gap-2 pt-2">
+                            <button onclick="saveProduct()" class="bg-brand-gold hover:bg-amber-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs transition">Salvar Produto</button>
+                            <button onclick="resetProductForm()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-4 py-2.5 rounded-xl text-xs transition">Cancelar</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="font-bold text-white text-sm">Produtos Cadastrados</h4>
+                        <div id="adminProductsList" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT APPLICATION LOGIC -->
+    <script>
+        const defaultProducts = [
+            { id: 1, name: "Onion Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 29.99, isPromo: true, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal suculento com cebola empanada crocante e molho especial no pão brioche." },
+            { id: 2, name: "Cheddar Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal com generosa camada de queijo cheddar cremoso derretido." },
+            { id: 3, name: "Bacon Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 29.99, isPromo: true, image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal acompanhado de fatias crocantes de bacon e queijo prato." },
+            { id: 4, name: "Egg Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal com ovo frito na hora, queijo e maionese especial." },
+            { id: 5, name: "Salada Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal, alface fresca, tomate fatiado, queijo prato e molho da casa." },
+            { id: 6, name: "Calabresa Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal combinado com saborosas fatias de calabresa acebolada." },
+            { id: 7, name: "Catupiry Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal coberto com autêntico Catupiry cremoso." },
+            { id: 8, name: "Cheddar Crispy Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal, cheddar cremoso e cebola crispy bem crocante." },
+            { id: 9, name: "Provolone Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal com queijo provolone derretido e defumado." },
+            { id: 10, name: "Cebola Caramelizada Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal coberto com cebola caramelizada no ponto perfeito." },
+            { id: 11, name: "Cheddar e Bacon Burguer", category: "burguer_artesanal", price: 24.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80", description: "Hambúrguer artesanal com cheddar cremoso e bastante bacon crocante." },
+            { id: 12, name: "Duplo Onion Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais, onion rings crocantes e queijo derretido." },
+            { id: 13, name: "Duplo Cheddar Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais e dobro de queijo cheddar cremoso." },
+            { id: 14, name: "Duplo Bacon Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 39.99, isPromo: true, image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais, dobro de bacon crocante e queijo prato." },
+            { id: 15, name: "Duplo Egg Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais, ovo frito e queijo derretido." },
+            { id: 16, name: "Duplo Salada Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais, alface, tomate, queijo duplo e maionese." },
+            { id: 17, name: "Duplo Calabresa Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais e calabresa acebolada em dobro." },
+            { id: 18, name: "Duplo Catupiry Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais e muito Catupiry cremoso." },
+            { id: 19, name: "Duplo Cheddar Crispy Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais, cheddar duplo e cebola crispy crocante." },
+            { id: 20, name: "Duplo Provolone Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais com queijo provolone duplo defumado." },
+            { id: 21, name: "Duplo Cebola Caramelizada", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais e cebola caramelizada especial." },
+            { id: 22, name: "Duplo Cheddar e Bacon Burguer", category: "burguer_duplo", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80", description: "2 Blends artesanais, muito cheddar e bastante bacon." },
+            { id: 23, name: "Batata P", category: "acompanhamento", price: 10.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80", description: "Batata frita crocante e sequinha porção Pequena." },
+            { id: 24, name: "Batata G", category: "acompanhamento", price: 20.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80", description: "Batata frita crocante e sequinha porção Grande." },
+            { id: 25, name: "Batata com Cheddar e Bacon P", category: "acompanhamento", price: 20.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=600&q=80", description: "Batata frita coberta com cheddar cremoso e bacon em pedaços (Pequena)." },
+            { id: 26, name: "Batata com Cheddar e Bacon G", category: "acompanhamento", price: 30.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1585109649139-366815a0d713?auto=format&fit=crop&w=600&q=80", description: "Batata frita coberta com cheddar cremoso e bacon em pedaços (Grande)." },
+            { id: 27, name: "Pizza Abobrinha", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=600&q=80", description: "Abobrinha grelhada com muçarela, parmesão e alho frito." },
+            { id: 28, name: "Pizza Atum", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80", description: "Atum ralado de primeira qualidade com cebola e azeitonas." },
+            { id: 29, name: "Pizza Bacon", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80", description: "Bacon crocante sobre saborosa camada de muçarela derretida." },
+            { id: 30, name: "Pizza Baiana", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Calabresa moída, ovos, pimenta, cebola e toque de muçarela." },
+            { id: 31, name: "Pizza Brócolis", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", description: "Brócolis temperado coberto com muçarela e alho frito." },
+            { id: 32, name: "Pizza Caipira", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80", description: "Frango desfiado, milho verde cremoso e muçarela." },
+            { id: 33, name: "Pizza Calabresa", category: "pizza_tradicional", price: 49.99, oldPrice: 59.99, isPromo: true, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80", description: "Calabresa fatiada, cebola e azeitonas pretas na massa artesanal." },
+            { id: 34, name: "Pizza Calamussa", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80", description: "Metade calabresa fatiada e metade muçarela especial." },
+            { id: 35, name: "Pizza Catupiry", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Camada generosa de Catupiry original temperado com orégano." },
+            { id: 36, name: "Pizza Cinco Queijos", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1573821663912-569905455b1c?auto=format&fit=crop&w=600&q=80", description: "Muçarela, provolone, catupiry, cheddar e parmesão ralado." },
+            { id: 37, name: "Pizza Dois Queijos", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", description: "Combinação clássica de muçarela e catupiry." },
+            { id: 38, name: "Pizza Escarola", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80", description: "Escarola refogada com bacon crocante e muçarela derretida." },
+            { id: 39, name: "Pizza Frango", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80", description: "Frango desfiado temperado coberto com Catupiry." },
+            { id: 40, name: "Pizza Lombo", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=600&q=80", description: "Lombo canadense fatiado com catupiry cremoso e cebola." },
+            { id: 41, name: "Pizza Marguerita", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=600&q=80", description: "Muçarela, rodelas de tomate, manjericão fresco e parmesão." },
+            { id: 42, name: "Pizza Mussarela", category: "pizza_tradicional", price: 49.99, oldPrice: 59.99, isPromo: true, image: "https://images.unsplash.com/photo-1573821663912-569905455b1c?auto=format&fit=crop&w=600&q=80", description: "Muçarela de alta qualidade, rodelas de tomate e azeitonas." },
+            { id: 43, name: "Pizza Palmito", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", description: "Palmito macio fatiado coberto com muçarela cremosa." },
+            { id: 44, name: "Pizza Portuguesa", category: "pizza_tradicional", price: 49.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Presunto, ovos, ervilha, cebola, muçarela e azeitonas." },
+            { id: 45, name: "Abobrinha Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=600&q=80", description: "Abobrinha grelhada com cream cheese, parmesão e bacon." },
+            { id: 46, name: "Atum Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80", description: "Atum sólido de qualidade premium com catupiry e palmito." },
+            { id: 47, name: "Bacon Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80", description: "Bacon extra crocante com cheddar e muçarela especial." },
+            { id: 48, name: "Baiana Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Calabresa moída picante, ovos, pimentão, cebola e catupiry." },
+            { id: 49, name: "Brócolis Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", description: "Brócolis, bacon crocante, catupiry e alho frito ouro." },
+            { id: 50, name: "Caipira Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80", description: "Frango desfiado, milho, bacon em cubos e catupiry duplo." },
+            { id: 51, name: "Calabresa Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80", description: "Calabresa artesanal com provolone, cebola e azeitonas." },
+            { id: 52, name: "Calamussa Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80", description: "Calabresa artesanal, muçarela especial e bacon." },
+            { id: 53, name: "Catupiry Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Catupiry extra com provolone e alho torrado." },
+            { id: 54, name: "Escarola Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80", description: "Escarola refogada, bacon, palmito e muçarela." },
+            { id: 55, name: "Frango Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80", description: "Frango com cream cheese, milho e bacon tostado." },
+            { id: 56, name: "Lombo Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=600&q=80", description: "Lombo canadense, champignon, catupiry e bacon." },
+            { id: 57, name: "Mussarela Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1573821663912-569905455b1c?auto=format&fit=crop&w=600&q=80", description: "Muçarela de búfala com tomate seco e manjericão." },
+            { id: 58, name: "Palmito Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", description: "Palmito nobre, catupiry, milho e bacon." },
+            { id: 59, name: "Portuguesa Especial", category: "pizza_especial", price: 59.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Portuguesa completa com palmito e catupiry gratinado." },
+            { id: 60, name: "Moda dos Freisingers", category: "pizza_especial", price: 59.99, oldPrice: 69.99, isPromo: true, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80", description: "Especial da casa: Frango, calabresa, presunto, ovos, milho, bacon e catupiry." },
+            { id: 61, name: "Brigadeiro", category: "pizza_doce", price: 41.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80", description: "Chocolate ao leite cremoso coberto com granulado macio." },
+            { id: 62, name: "Chocolate", category: "pizza_doce", price: 39.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80", description: "Camada generosa de chocolate ao leite nobre derretido." },
+            { id: 63, name: "Prestígio", category: "pizza_doce", price: 42.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80", description: "Chocolate ao leite coberto com coco ralado úmido." },
+            { id: 64, name: "Confetes", category: "pizza_doce", price: 42.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80", description: "Chocolate ao leite com confeitos M&Ms/disquetes coloridos." },
+            { id: 65, name: "Pizza Frita Frango", category: "pizza_frita", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80", description: "Massa frita bem crocante recheada com frango e catupiry." },
+            { id: 66, name: "Pizza Frita Calabresa", category: "pizza_frita", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80", description: "Massa frita crocante com calabresa e muçarela." },
+            { id: 67, name: "Pizza Frita Escarola", category: "pizza_frita", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80", description: "Massa frita com escarola temperada e queijo." },
+            { id: 68, name: "Pizza Frita Portuguesa", category: "pizza_frita", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Massa frita recheada com presunto, ovo, muçarela e ervilha." },
+            { id: 69, name: "Pizza Frita Brócolis", category: "pizza_frita", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", description: "Massa frita crocante com brócolis e muçarela." },
+            { id: 70, name: "Pizza Frita À Moda do Cliente (4 ingr.)", category: "pizza_frita", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80", description: "Escolha até 4 ingredientes da sua preferência para rechear." },
+            { id: 71, name: "Beirute Presunto", category: "beirute", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80", description: "Pão sírio, presunto, queijo, ovo, alface, tomate e maionese." },
+            { id: 72, name: "Beirute Frango", category: "beirute", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80", description: "Pão sírio, frango desfiado, catupiry, alface, tomate e ovo." },
+            { id: 73, name: "Beirute Calabresa", category: "beirute", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80", description: "Pão sírio, calabresa acebolada, queijo derretido, alface e tomate." },
+            { id: 74, name: "Beirute Lombo", category: "beirute", price: 34.99, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80", description: "Pão sírio, lombo canadense, queijo, ovo, salada e maionese." },
+            { id: 75, name: "Calzone Frango", category: "calzone", price: 42.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Pizza dobrada recheada com frango desfiado e catupiry." },
+            { id: 76, name: "Calzone Calabresa", category: "calzone", price: 39.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Calzone recheado com calabresa e muçarela derretida." },
+            { id: 77, name: "Calzone 4 Queijos", category: "calzone", price: 43.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1573821663912-569905455b1c?auto=format&fit=crop&w=600&q=80", description: "Calzone recheado com muçarela, provolone, catupiry e parmesão." },
+            { id: 78, name: "Calzone Portuguesa", category: "calzone", price: 42.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80", description: "Calzone recheado com presunto, ovo, cebola e muçarela." },
+            { id: 79, name: "Calzone Escarola", category: "calzone", price: 40.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80", description: "Calzone recheado com escarola refogada, bacon e queijo." },
+            { id: 80, name: "Calzone Vegetais", category: "calzone", price: 42.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80", description: "Calzone recheado com abobrinha, brócolis, palmito e muçarela." },
+            { id: 81, name: "Coca 2L", category: "bebidas", price: 14.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Coca-Cola garrafa PET 2 Litros." },
+            { id: 82, name: "Coca 1,5L", category: "bebidas", price: 12.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Coca-Cola garrafa PET 1,5 Litro." },
+            { id: 83, name: "Coca 1L", category: "bebidas", price: 10.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Coca-Cola garrafa PET 1 Litro." },
+            { id: 84, name: "Coca 600ml", category: "bebidas", price: 8.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Coca-Cola garrafa 600ml." },
+            { id: 85, name: "Coca Lata 350ml", category: "bebidas", price: 7.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Coca-Cola lata 350ml." },
+            { id: 86, name: "Coca Lata 220ml", category: "bebidas", price: 5.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Coca-Cola mini lata 220ml." },
+            { id: 87, name: "Coquinha 200ml", category: "bebidas", price: 4.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Coca-Cola garrafinha 200ml." },
+            { id: 88, name: "Fanta 2L", category: "bebidas", price: 14.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Fanta garrafa 2 Litros." },
+            { id: 89, name: "Fanta 1,5L", category: "bebidas", price: 12.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Fanta garrafa 1,5 Litro." },
+            { id: 90, name: "Fanta Lata", category: "bebidas", price: 7.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Fanta lata 350ml." },
+            { id: 91, name: "Fanta 200ml", category: "bebidas", price: 4.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Fanta garrafinha 200ml." },
+            { id: 92, name: "Guaraná 2L", category: "bebidas", price: 14.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Guaraná Antarctica garrafa PET 2 Litros." },
+            { id: 93, name: "Guaraná 1,5L", category: "bebidas", price: 12.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Guaraná Antarctica garrafa PET 1,5 Litro." },
+            { id: 94, name: "Guaraná 1L", category: "bebidas", price: 10.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Guaraná Antarctica garrafa PET 1 Litro." },
+            { id: 95, name: "Guaraná 600ml", category: "bebidas", price: 8.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Guaraná Antarctica garrafa 600ml." },
+            { id: 96, name: "Guaraná 200ml", category: "bebidas", price: 4.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Guaraná Antarctica garrafinha 200ml." },
+            { id: 97, name: "Pepsi 2L", category: "bebidas", price: 13.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Pepsi garrafa 2 Litros." },
+            { id: 98, name: "Pepsi 1,5L", category: "bebidas", price: 10.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Pepsi garrafa 1,5 Litro." },
+            { id: 99, name: "Pepsi 200ml", category: "bebidas", price: 3.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80", description: "Refrigerante Pepsi garrafinha 200ml." },
+            { id: 100, name: "Tubaína 2L", category: "bebidas", price: 9.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Tubaína sabor tradicional garrafa 2 Litros." },
+            { id: 101, name: "Tubaína 200ml", category: "bebidas", price: 3.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&w=600&q=80", description: "Tubaína garrafinha 200ml." },
+            { id: 102, name: "Del Valle 1,5L", category: "bebidas", price: 10.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=600&q=80", description: "Suco Del Valle garrafa 1,5 Litro." },
+            { id: 103, name: "Del Valle 500ml", category: "bebidas", price: 8.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=600&q=80", description: "Suco Del Valle garrafa 500ml." },
+            { id: 104, name: "Del Valle 500ml (Opção 2)", category: "bebidas", price: 6.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=600&q=80", description: "Suco Del Valle garrafa 500ml (Sabor promocional)." },
+            { id: 105, name: "Água", category: "bebidas", price: 3.00, oldPrice: 0, isPromo: false, image: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=600&q=80", description: "Água mineral sem gás 500ml." }
+        ];
+
+        let products = JSON.parse(localStorage.getItem('freisinger_products')) || defaultProducts;
+        let cart = JSON.parse(localStorage.getItem('freisinger_cart')) || [];
+        let ordersHistory = JSON.parse(localStorage.getItem('freisinger_orders')) || [];
+        let storeOpen = JSON.parse(localStorage.getItem('freisinger_store_open')) !== false;
+        
+        let currentCategory = 'todos';
+        let currentSearchQuery = '';
+        let currentHistoryFilter = 'todos';
+        let currentPromoSlideIndex = 0;
+        let promoInterval = null;
+
+        let selectedProductModal = null;
+        let modalQuantity = 1;
+        let orderTypeState = 'delivery';
+        let paymentMethodState = 'pix';
+        let userRole = null;
+
+        document.getElementById('year').innerText = new Date().getFullYear();
+
+        function initApp() {
+            renderStoreStatus();
+            renderCategoryTabs();
+            renderPromoCarousel();
+            renderProducts();
+            updateCartBadge();
+            setupPixQrCode();
+            setupImageFileInput();
+        }
+
+        function saveProductsToStorage() { localStorage.setItem('freisinger_products', JSON.stringify(products)); }
+        function saveCartToStorage() { localStorage.setItem('freisinger_cart', JSON.stringify(cart)); updateCartBadge(); }
+        function saveOrdersToStorage() { localStorage.setItem('freisinger_orders', JSON.stringify(ordersHistory)); }
+
+        // Conversor de arquivo de imagem para Base64
+        function setupImageFileInput() {
+            const fileInput = document.getElementById('prodImageFile');
+            if(fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(uploadEvent) {
+                            document.getElementById('prodImageBase64').value = uploadEvent.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+
+        function renderStoreStatus() {
+            const badge = document.getElementById('storeStatusBadge');
+            const text = document.getElementById('storeStatusText');
+            const btn = document.getElementById('toggleStoreStatusBtn');
+
+            if (storeOpen) {
+                badge.className = 'inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping';
+                text.className = 'font-semibold text-emerald-400';
+                text.innerText = 'Aberto Agora';
+                if(btn) {
+                    btn.className = 'w-full py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white';
+                    btn.innerHTML = '<i class="fa-solid fa-store"></i> Loja Aberta';
+                }
+            } else {
+                badge.className = 'inline-block w-2.5 h-2.5 rounded-full bg-red-500';
+                text.className = 'font-semibold text-red-400';
+                text.innerText = 'Fechado no momento';
+                if(btn) {
+                    btn.className = 'w-full py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white';
+                    btn.innerHTML = '<i class="fa-solid fa-store-slash"></i> Loja Fechada';
+                }
+            }
+            localStorage.setItem('freisinger_store_open', JSON.stringify(storeOpen));
+        }
+
+        function toggleStoreStatus() {
+            storeOpen = !storeOpen;
+            renderStoreStatus();
+        }
+
+        function renderCategoryTabs() {
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => {
+                const cat = btn.getAttribute('data-cat');
+                if (cat === currentCategory) {
+                    btn.className = 'cat-btn active px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-brand-red text-white shadow-md';
+                } else {
+                    btn.className = 'cat-btn px-4 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700';
+                }
+            });
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            renderCategoryTabs();
+            renderProducts();
+        }
+
+        function handleSearch() {
+            currentSearchQuery = document.getElementById('searchInput').value.toLowerCase();
+            renderProducts();
+        }
+
+        function renderPromoCarousel() {
+            const slidesContainer = document.getElementById('carouselSlides');
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+            const promos = products.filter(p => p.isPromo);
+
+            if (promoInterval) clearInterval(promoInterval);
+
+            if (promos.length === 0) {
+                slidesContainer.innerHTML = '<div class="w-full h-full flex items-center justify-center text-xs text-slate-400 italic">Nenhuma promoção ativa no momento.</div>';
+                indicatorsContainer.innerHTML = '';
+                return;
+            }
+
+            slidesContainer.innerHTML = promos.map(p => `
+                <div onclick="openProductModal(${p.id})" class="min-w-full h-full relative cursor-pointer group">
+                    <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${p.name}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5">
+                        <span class="text-[10px] bg-brand-red text-white font-black px-2.5 py-0.5 rounded-full uppercase w-fit mb-1 shadow">PROMOÇÃO DE HOJE</span>
+                        <h4 class="text-base font-extrabold text-white truncate">${p.name}</h4>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-sm font-black text-emerald-400">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
+                            ${p.oldPrice ? `<span class="text-xs text-slate-400 line-through">R$ ${p.oldPrice.toFixed(2).replace('.', ',')}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            indicatorsContainer.innerHTML = promos.map((_, i) => `
+                <button onclick="goToPromoSlide(${i})" class="w-2.5 h-2.5 rounded-full transition ${i === currentPromoSlideIndex ? 'bg-brand-gold w-6' : 'bg-white/50'}"></button>
+            `).join('');
+
+            updateCarouselPosition();
+            if (promos.length > 1) promoInterval = setInterval(nextPromoSlide, 4000);
+        }
+
+        function updateCarouselPosition() {
+            const slidesContainer = document.getElementById('carouselSlides');
+            const promos = products.filter(p => p.isPromo);
+            if (promos.length === 0) return;
+
+            if (currentPromoSlideIndex >= promos.length) currentPromoSlideIndex = 0;
+            if (currentPromoSlideIndex < 0) currentPromoSlideIndex = promos.length - 1;
+
+            slidesContainer.style.transform = `translateX(-${currentPromoSlideIndex * 100}%)`;
+            const dots = document.querySelectorAll('#carouselIndicators button');
+            dots.forEach((dot, idx) => {
+                dot.className = idx === currentPromoSlideIndex ? 'w-6 h-2.5 rounded-full bg-brand-gold transition' : 'w-2.5 h-2.5 rounded-full bg-white/50 transition';
+            });
+        }
+
+        function nextPromoSlide() { currentPromoSlideIndex++; updateCarouselPosition(); }
+        function prevPromoSlide() { currentPromoSlideIndex--; updateCarouselPosition(); }
+        function goToPromoSlide(index) { currentPromoSlideIndex = index; updateCarouselPosition(); }
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            let filtered = products.filter(p => {
+                const matchesCat = currentCategory === 'todos' || 
+                                   (currentCategory === 'promocoes' && p.isPromo) || 
+                                   p.category === currentCategory;
+                const matchesSearch = p.name.toLowerCase().includes(currentSearchQuery) || 
+                                      p.description.toLowerCase().includes(currentSearchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(p => `
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-48 w-full bg-slate-800 overflow-hidden cursor-pointer" onclick="openProductModal(${p.id})">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            ${p.isPromo ? '<span class="absolute top-3 left-3 bg-brand-red text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">PROMOÇÃO</span>' : ''}
+                        </div>
+                        <div class="p-5 space-y-2">
+                            <h3 onclick="openProductModal(${p.id})" class="text-base font-bold text-white cursor-pointer hover:text-brand-gold transition">${p.name}</h3>
+                            <p class="text-xs text-slate-400 line-clamp-2">${p.description}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 flex items-center justify-between mt-2">
+                        <div>
+                            <span class="text-lg font-black text-emerald-400 block">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
+                            ${p.oldPrice ? `<span class="text-xs text-slate-500 line-through">R$ ${p.oldPrice.toFixed(2).replace('.', ',')}</span>` : ''}
+                        </div>
+                        <button onclick="openProductModal(${p.id})" class="bg-brand-red hover:bg-brand-redHover text-white font-bold p-3 rounded-2xl transition shadow-md flex items-center gap-2 text-xs">
+                            <i class="fa-solid fa-plus"></i> Pedir
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProductModal(id) {
+            selectedProductModal = products.find(p => p.id === id);
+            if (!selectedProductModal) return;
+
+            modalQuantity = 1;
+            document.getElementById('modalImg').src = selectedProductModal.image;
+            document.getElementById('modalTitle').innerText = selectedProductModal.name;
+            document.getElementById('modalDescription').innerText = selectedProductModal.description;
+            document.getElementById('modalPrice').innerText = `R$ ${selectedProductModal.price.toFixed(2).replace('.', ',')}`;
+            
+            const oldPriceEl = document.getElementById('modalOldPrice');
+            const promoBadge = document.getElementById('modalPromoBadge');
+
+            if (selectedProductModal.oldPrice && selectedProductModal.oldPrice > 0) {
+                oldPriceEl.innerText = `R$ ${selectedProductModal.oldPrice.toFixed(2).replace('.', ',')}`;
+                oldPriceEl.classList.remove('hidden');
+                promoBadge.classList.remove('hidden');
+            } else {
+                oldPriceEl.classList.add('hidden');
+                promoBadge.classList.add('hidden');
+            }
+
+            document.getElementById('modalQty').innerText = modalQuantity;
+            document.getElementById('modalObs').value = '';
+            renderModalCustomizations(selectedProductModal.category);
+            updateModalTotal();
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
+
+        function renderModalCustomizations(category) {
+            const container = document.getElementById('modalCustomizationOptions');
+            container.innerHTML = '';
+            if (category.startsWith('pizza_')) {
+                container.innerHTML = `
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-300 uppercase">Escolha a Borda Recheada</label>
+                        <div class="space-y-1.5 text-xs text-slate-300">
+                            <label class="flex items-center gap-2"><input type="radio" name="borda" value="Tradicional" checked class="accent-brand-red"> Borda Tradicional (Grátis)</label>
+                            <label class="flex items-center gap-2"><input type="radio" name="borda" value="Catupiry (+R$ 8,00)" class="accent-brand-red" data-price="8"> Borda de Catupiry (+R$ 8,00)</label>
+                            <label class="flex items-center gap-2"><input type="radio" name="borda" value="Cheddar (+R$ 7,00)" class="accent-brand-red" data-price="7"> Borda de Cheddar (+R$ 7,00)</label>
+                            <label class="flex items-center gap-2"><input type="radio" name="borda" value="Chocolate (+R$ 10,00)" class="accent-brand-red" data-price="10"> Borda de Chocolate (+R$ 10,00)</label>
+                        </div>
+                    </div>
+                `;
+            } else if (category.startsWith('burguer_')) {
+                container.innerHTML = `
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-300 uppercase">Ponto da Carne</label>
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <label class="border border-slate-700 p-2 rounded-xl text-center cursor-pointer hover:border-brand-gold"><input type="radio" name="ponto" value="Ao Ponto" checked class="accent-brand-red block mx-auto mb-1"> Ao Ponto</label>
+                            <label class="border border-slate-700 p-2 rounded-xl text-center cursor-pointer hover:border-brand-gold"><input type="radio" name="ponto" value="Bem Passado" class="accent-brand-red block mx-auto mb-1"> Bem Passado</label>
+                            <label class="border border-slate-700 p-2 rounded-xl text-center cursor-pointer hover:border-brand-gold"><input type="radio" name="ponto" value="Mal Passado" class="accent-brand-red block mx-auto mb-1"> Mal Passado</label>
+                        </div>
+                    </div>
+                    <div class="space-y-2 pt-2">
+                        <label class="text-xs font-bold text-slate-300 uppercase">Adicionais Extras</label>
+                        <div class="space-y-1.5 text-xs text-slate-300">
+                            <label class="flex items-center gap-2"><input type="checkbox" name="adicional" value="Bacon Extra (+R$ 6,00)" data-price="6" class="accent-brand-red"> Bacon Extra (+R$ 6,00)</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" name="adicional" value="Queijo Extra (+R$ 5,00)" data-price="5" class="accent-brand-red"> Queijo Extra (+R$ 5,00)</label>
+                            <label class="flex items-center gap-2"><input type="checkbox" name="adicional" value="Ovo (+R$ 3,00)" data-price="3" class="accent-brand-red"> Ovo (+R$ 3,00)</label>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function adjustModalQty(change) {
+            modalQuantity += change;
+            if (modalQuantity < 1) modalQuantity = 1;
+            document.getElementById('modalQty').innerText = modalQuantity;
+            updateModalTotal();
+        }
+
+        function updateModalTotal() {
+            if (!selectedProductModal) return;
+            let unitPrice = selectedProductModal.price;
+            document.querySelectorAll('#modalCustomizationOptions input[type="radio"]:checked').forEach(r => { if (r.dataset.price) unitPrice += parseFloat(r.dataset.price); });
+            document.querySelectorAll('#modalCustomizationOptions input[type="checkbox"]:checked').forEach(b => { if (b.dataset.price) unitPrice += parseFloat(b.dataset.price); });
+            const total = unitPrice * modalQuantity;
+            document.getElementById('modalTotalAdd').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        document.getElementById('modalCustomizationOptions').addEventListener('change', updateModalTotal);
+
+        function confirmAddToCart() {
+            if (!selectedProductModal) return;
+            let unitPrice = selectedProductModal.price;
+            let customizations = [];
+
+            document.querySelectorAll('#modalCustomizationOptions input[type="radio"]:checked').forEach(r => {
+                customizations.push(r.value);
+                if (r.dataset.price) unitPrice += parseFloat(r.dataset.price);
+            });
+            document.querySelectorAll('#modalCustomizationOptions input[type="checkbox"]:checked').forEach(b => {
+                customizations.push(b.value);
+                if (b.dataset.price) unitPrice += parseFloat(b.dataset.price);
+            });
+
+            const obs = document.getElementById('modalObs').value.trim();
+            if (obs) customizations.push(`Obs: ${obs}`);
+
+            cart.push({
+                cartId: Date.now() + Math.random(),
+                productId: selectedProductModal.id,
+                name: selectedProductModal.name,
+                image: selectedProductModal.image,
+                unitPrice: unitPrice,
+                quantity: modalQuantity,
+                customizations: customizations
+            });
+
+            saveCartToStorage();
+            closeProductModal();
+            openCartModal();
+        }
+
+        function updateCartBadge() {
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            document.getElementById('cartCountBadge').innerText = totalItems;
+            document.getElementById('mobileCartCount').innerText = totalItems;
+            const subtotal = cart.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0);
+            document.getElementById('mobileCartTotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+        }
+
+        function openCartModal() {
+            renderCartItems();
+            document.getElementById('cartModal').classList.remove('hidden');
+        }
+
+        function closeCartModal() { document.getElementById('cartModal').classList.add('hidden'); }
+
+        function renderCartItems() {
+            const list = document.getElementById('cartItemsList');
+            const emptyMsg = document.getElementById('cartEmptyMessage');
+            const checkoutSection = document.getElementById('checkoutFormSection');
+            const cartFooter = document.getElementById('cartFooter');
+
+            if (cart.length === 0) {
+                list.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+                checkoutSection.classList.add('hidden');
+                cartFooter.classList.add('hidden');
+                return;
+            }
+
+            emptyMsg.classList.add('hidden');
+            checkoutSection.classList.remove('hidden');
+            cartFooter.classList.remove('hidden');
+
+            list.innerHTML = cart.map(item => `
+                <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-3 flex items-center justify-between gap-3">
+                    <img src="${item.image}" class="w-14 h-14 rounded-xl object-cover shrink-0">
+                    <div class="flex-grow">
+                        <h4 class="text-xs font-bold text-white">${item.name}</h4>
+                        <p class="text-[10px] text-slate-400">${item.customizations.join(' • ')}</p>
+                        <span class="text-xs font-black text-emerald-400 mt-1 block">R$ ${(item.unitPrice * item.quantity).toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-lg p-1">
+                        <button onclick="adjustCartQty('${item.cartId}', -1)" class="w-6 h-6 bg-slate-800 text-white rounded font-bold text-xs">-</button>
+                        <span class="text-xs font-bold text-white px-1">${item.quantity}</span>
+                        <button onclick="adjustCartQty('${item.cartId}', 1)" class="w-6 h-6 bg-slate-800 text-white rounded font-bold text-xs">+</button>
+                    </div>
+                    <button onclick="removeFromCart('${item.cartId}')" class="text-slate-500 hover:text-red-400 p-2 text-sm"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+
+            updateCartTotals();
+        }
+
+        function adjustCartQty(cartId, change) {
+            const item = cart.find(i => i.cartId == cartId);
+            if (!item) return;
+            item.quantity += change;
+            if (item.quantity <= 0) cart = cart.filter(i => i.cartId != cartId);
+            saveCartToStorage();
+            renderCartItems();
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(i => i.cartId != cartId);
+            saveCartToStorage();
+            renderCartItems();
+        }
+
+        function toggleDeliveryType(type) {
+            orderTypeState = type;
+            const addressFields = document.getElementById('addressFields');
+            if (type === 'pickup') addressFields.classList.add('hidden');
+            else addressFields.classList.remove('hidden');
+            updateCartTotals();
+        }
+
+        function togglePaymentMethod(method) {
+            paymentMethodState = method;
+            const changeField = document.getElementById('changeField');
+            const pixInfoBox = document.getElementById('pixInfoBox');
+            if (method === 'money') { changeField.classList.remove('hidden'); pixInfoBox.classList.add('hidden'); }
+            else { changeField.classList.add('hidden'); pixInfoBox.classList.remove('hidden'); }
+        }
+
+        function updateCartTotals() {
+            const subtotal = cart.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0);
+            const deliveryFee = orderTypeState === 'delivery' ? 7.00 : 0.00;
+            const total = subtotal + deliveryFee;
+
+            document.getElementById('summarySubtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('summaryDeliveryFee').innerText = `R$ ${deliveryFee.toFixed(2).replace('.', ',')}`;
+            document.getElementById('summaryTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function setupPixQrCode() {
+            const container = document.getElementById('pixQrCode');
+            container.innerHTML = '';
+            new QRCode(container, {
+                text: "00020126580014br.gov.bcb.pix0136119598840001875204000053039865802BR5925FreisingerS Pizzas Burgers6009Sao Paulo62070503***63041A1C",
+                width: 128, height: 128
+            });
+        }
+
+        function copyPixKey() {
+            navigator.clipboard.writeText("00020126580014br.gov.bcb.pix0136119598840001875204000053039865802BR5925FreisingerS Pizzas Burgers6009Sao Paulo62070503***63041A1C");
+            alert("Chave Pix Copia e Cola copiada com sucesso!");
+        }
+
+        function submitOrderToWhatsApp() {
+            if (!storeOpen) { alert("A loja está fechada no momento e não está aceitando pedidos."); return; }
+
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+
+            if (!name || !phone) { alert("Por favor, preencha seu Nome e WhatsApp."); return; }
+
+            let addressText = "Retirada no Local";
+            if (orderTypeState === 'delivery') {
+                const street = document.getElementById('custStreet').value.trim();
+                const neighborhood = document.getElementById('custNeighborhood').value.trim();
+                const complement = document.getElementById('custComplement').value.trim();
+
+                if (!street || !neighborhood) { alert("Por favor, preencha o endereço completo para entrega."); return; }
+                addressText = `${street}, Bairro: ${neighborhood} ${complement ? `(Ref: ${complement})` : ''}`;
+            }
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0);
+            const deliveryFee = orderTypeState === 'delivery' ? 7.00 : 0.00;
+            const total = subtotal + deliveryFee;
+
+            let paymentText = "Pix (QR Code / Copia e Cola)";
+            if (paymentMethodState === 'money') {
+                const change = document.getElementById('custChange').value.trim();
+                paymentText = `Dinheiro ${change ? `(Troco para: ${change})` : ''}`;
+            }
+
+            const now = new Date();
+            const timeFormatted = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            const newOrder = {
+                id: Date.now(), 
+                time: timeFormatted, 
+                customerName: name, 
+                customerPhone: phone,
+                orderType: orderTypeState, 
+                address: addressText, 
+                paymentMethod: paymentMethodState,
+                paymentText: paymentText, 
+                items: JSON.parse(JSON.stringify(cart)),
+                subtotal, 
+                deliveryFee, 
+                total, 
+                status: 'pendente'
+            };
+
+            ordersHistory.unshift(newOrder);
+            saveOrdersToStorage();
+
+            let message = `*🍕 NOVO PEDIDO - FREISINGERS* 🍔\n\n`;
+            message += `*Cliente:* ${name}\n`;
+            message += `*Telefone:* ${phone}\n`;
+            message += `*Tipo:* ${orderTypeState === 'delivery' ? 'Entrega em Casa' : 'Retirada na Loja'}\n`;
+            if (orderTypeState === 'delivery') message += `*Endereço:* ${addressText}\n`;
+            message += `*Pagamento:* ${paymentText}\n\n*--- ITENS DO PEDIDO ---*\n`;
+
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.quantity}x ${item.name} - R$ ${(item.unitPrice * item.quantity).toFixed(2).replace('.', ',')}\n`;
+                if (item.customizations.length > 0) message += `   _(${item.customizations.join(', ')})_\n`;
+            });
+
+            message += `\n*Subtotal:* R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+            message += `*Taxa de Entrega:* R$ ${deliveryFee.toFixed(2).replace('.', ',')}\n`;
+            message += `*TOTAL GERAL:* R$ ${total.toFixed(2).replace('.', ',')}\n`;
+
+            cart = [];
+            saveCartToStorage();
+            closeCartModal();
+
+            window.open(`https://wa.me/5511959884871?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // PANEL & AUTH LOGIC
+        function toggleAdminModal(show) {
+            const modal = document.getElementById('adminModal');
+            if (show) { modal.classList.remove('hidden'); checkSessionViews(); }
+            else { modal.classList.add('hidden'); }
+        }
+
+        function loginPanel() {
+            const pass = document.getElementById('adminPasswordInput').value.trim();
+            if (pass === '130978') userRole = 'admin';
+            else if (pass === '1309') userRole = 'courier';
+            else { alert("Credenciais inválidas."); document.getElementById('adminPasswordInput').value = ''; return; }
+            document.getElementById('adminPasswordInput').value = '';
+            checkSessionViews();
+        }
+
+        function logoutSession() { userRole = null; checkSessionViews(); }
+
+        function checkSessionViews() {
+            const authView = document.getElementById('adminAuthView');
+            const dashAdminView = document.getElementById('adminDashboardView');
+            const dashCourierView = document.getElementById('courierDashboardView');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const title = document.getElementById('panelHeaderTitle');
+            const subtitle = document.getElementById('panelHeaderSubtitle');
+
+            if (userRole === 'admin') {
+                authView.classList.add('hidden'); dashCourierView.classList.add('hidden'); dashAdminView.classList.remove('hidden'); logoutBtn.classList.remove('hidden');
+                title.innerText = "Painel Administrativo"; subtitle.innerText = "Gestão de caixa, cardápio e dados completos dos clientes";
+                renderAdminOrdersAndCaixa(); renderAdminProductsList();
+            } else if (userRole === 'courier') {
+                authView.classList.add('hidden'); dashAdminView.classList.add('hidden'); dashCourierView.classList.remove('hidden'); logoutBtn.classList.remove('hidden');
+                title.innerText = "Painel do Entregador"; subtitle.innerText = "Fila de entregas";
+                renderCourierOrdersList();
+            } else {
+                authView.classList.remove('hidden'); dashAdminView.classList.add('hidden'); dashCourierView.classList.add('hidden'); logoutBtn.classList.add('hidden');
+                title.innerText = "Painel de Acesso"; subtitle.innerText = "Entre com sua senha autorizada";
+            }
+        }
+
+        function switchAdminTab(tab) {
+            const tabOrdersBtn = document.getElementById('tabOrdersBtn');
+            const tabProductsBtn = document.getElementById('tabProductsBtn');
+            const ordersContent = document.getElementById('adminOrdersTabContent');
+            const productsContent = document.getElementById('adminProductsTabContent');
+
+            if (tab === 'orders') {
+                tabOrdersBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-brand-gold text-slate-950';
+                tabProductsBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-800 text-slate-300 hover:bg-slate-700';
+                ordersContent.classList.remove('hidden'); productsContent.classList.add('hidden');
+                renderAdminOrdersAndCaixa();
+            } else {
+                tabProductsBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-brand-gold text-slate-950';
+                tabOrdersBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-slate-800 text-slate-300 hover:bg-slate-700';
+                productsContent.classList.remove('hidden'); ordersContent.classList.add('hidden');
+                renderAdminProductsList();
+            }
+        }
+
+        function renderCourierOrdersList() {
+            const container = document.getElementById('courierOrdersList');
+            if (ordersHistory.length === 0) { container.innerHTML = '<div class="text-center py-8 text-xs text-slate-400">Nenhum pedido registrado.</div>'; return; }
+            container.innerHTML = ordersHistory.map(o => `
+                <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
+                        <div>
+                            <span class="text-xs font-bold text-white">#${o.id.toString().slice(-4)} - ${o.customerName}</span>
+                            <span class="text-[10px] text-slate-400 block">${o.time} • ${o.customerPhone}</span>
+                        </div>
+                        ${getStatusBadgeHtml(o.status)}
+                    </div>
+                    <div class="text-xs text-slate-300 space-y-1">
+                        <p><strong class="text-white">Tipo:</strong> ${o.orderType === 'delivery' ? 'Entrega em Casa' : 'Retirada na Loja'}</p>
+                        <p><strong class="text-white">Endereço:</strong> ${o.address}</p>
+                        <p><strong class="text-white">Total:</strong> R$ ${o.total.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                    <div class="flex items-center justify-end gap-2 pt-1 border-t border-slate-700/60">
+                        <button onclick="updateOrderStatus(${o.id}, 'concluido')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition">Marcar Entregue</button>
+                        <button onclick="updateOrderStatus(${o.id}, 'cancelado')" class="bg-red-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition">Cancelar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterOrdersHistory(filter) { currentHistoryFilter = filter; renderAdminOrdersAndCaixa(); }
+
+        function renderAdminOrdersAndCaixa() {
+            const list = document.getElementById('adminOrdersList');
+            let filtered = ordersHistory.filter(o => currentHistoryFilter === 'todos' || o.status === currentHistoryFilter);
+
+            const completedOrders = ordersHistory.filter(o => o.status === 'concluido');
+            const totalSales = completedOrders.reduce((sum, o) => sum + o.total, 0);
+            const pixSales = completedOrders.filter(o => o.paymentMethod === 'pix').reduce((sum, o) => sum + o.total, 0);
+            const moneySales = completedOrders.filter(o => o.paymentMethod === 'money').reduce((sum, o) => sum + o.total, 0);
+
+            document.getElementById('totalSalesAmount').innerText = `R$ ${totalSales.toFixed(2).replace('.', ',')}`;
+            document.getElementById('completedCount').innerText = `${completedOrders.length} pedido(s) concluído(s)`;
+            document.getElementById('pixSalesTotal').innerText = `R$ ${pixSales.toFixed(2).replace('.', ',')}`;
+            document.getElementById('moneySalesTotal').innerText = `R$ ${moneySales.toFixed(2).replace('.', ',')}`;
+
+            if (filtered.length === 0) { list.innerHTML = '<div class="text-center py-8 text-xs text-slate-400">Nenhum pedido encontrado.</div>'; return; }
+
+            list.innerHTML = filtered.map(o => `
+                <div class="bg-slate-800 border border-slate-700/80 rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
+                        <div>
+                            <span class="text-xs font-bold text-white">#${o.id.toString().slice(-4)} - <span class="text-brand-gold">${o.customerName}</span></span>
+                            <span class="text-[10px] text-slate-400 block">${o.time} • WhatsApp: <strong class="text-emerald-400">${o.customerPhone}</strong></span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${getStatusBadgeHtml(o.status)}
+                            <button onclick="deleteOrderRecord(${o.id})" class="text-slate-500 hover:text-red-400 p-1 text-xs" title="Apagar registro"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-300 space-y-1">
+                        <p><strong class="text-white">Tipo de Pedido:</strong> ${o.orderType === 'delivery' ? 'Entrega em Casa' : 'Retirada no Local'}</p>
+                        <p><strong class="text-white">Endereço do Cliente:</strong> ${o.address}</p>
+                        <p><strong class="text-white">Forma de Pagamento:</strong> ${o.paymentText}</p>
+                        <div class="pt-1 bg-slate-900/50 p-2.5 rounded-xl border border-slate-700/50">
+                            <strong class="text-white block mb-1">Itens do Pedido:</strong>
+                            <ul class="list-disc list-inside text-[11px] text-slate-300 space-y-0.5">
+                                ${o.items.map(i => `<li>${i.quantity}x ${i.name} (${i.customizations.join(', ')}) - R$ ${(i.unitPrice * i.quantity).toFixed(2).replace('.', ',')}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <p class="pt-1 text-sm font-black text-emerald-400">Total do Cliente: R$ ${o.total.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                    <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-700/60">
+                        <span class="text-[10px] text-slate-400 me-auto">Mudar status:</span>
+                        <button onclick="updateOrderStatus(${o.id}, 'pendente')" class="bg-slate-700 text-slate-300 font-bold text-[10px] px-2.5 py-1 rounded-lg">Pendente</button>
+                        <button onclick="updateOrderStatus(${o.id}, 'concluido')" class="bg-emerald-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg">Concluído</button>
+                        <button onclick="updateOrderStatus(${o.id}, 'cancelado')" class="bg-red-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg">Cancelado</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusBadgeHtml(status) {
+            if (status === 'concluido') return '<span class="text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800/60 px-2.5 py-0.5 rounded-full">Entregue</span>';
+            if (status === 'cancelado') return '<span class="text-[10px] font-bold bg-red-950 text-red-400 border border-red-800/60 px-2.5 py-0.5 rounded-full">Cancelado</span>';
+            return '<span class="text-[10px] font-bold bg-amber-950 text-amber-400 border border-amber-800/60 px-2.5 py-0.5 rounded-full">Pendente</span>';
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const order = ordersHistory.find(o => o.id === orderId);
+            if (!order) return;
+            order.status = newStatus;
+            saveOrdersToStorage();
+            if (userRole === 'admin') renderAdminOrdersAndCaixa();
+            else if (userRole === 'courier') renderCourierOrdersList();
+        }
+
+        function deleteOrderRecord(orderId) {
+            if (confirm("Apagar registro de pedido?")) {
+                ordersHistory = ordersHistory.filter(o => o.id !== orderId);
+                saveOrdersToStorage();
+                renderAdminOrdersAndCaixa();
+            }
+        }
+
+        function renderAdminProductsList() {
+            const list = document.getElementById('adminProductsList');
+            list.innerHTML = products.map(p => `
+                <div class="bg-slate-800 border border-slate-700/80 rounded-xl p-3 flex items-center justify-between gap-3 text-xs">
+                    <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover">
+                    <div class="flex-grow">
+                        <span class="font-bold text-white">${p.name}</span>
+                        <div class="text-slate-400">R$ ${p.price.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="editProduct(${p.id})" class="bg-slate-700 text-brand-gold p-2 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteProduct(${p.id})" class="bg-slate-700 text-red-400 p-2 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveProduct() {
+            const id = document.getElementById('editProductId').value;
+            const name = document.getElementById('prodName').value.trim();
+            const category = document.getElementById('prodCategory').value;
+            const price = parseFloat(document.getElementById('prodPrice').value);
+            const oldPrice = parseFloat(document.getElementById('prodOldPrice').value) || 0;
+            const description = document.getElementById('prodDescription').value.trim();
+            const isPromo = document.getElementById('prodIsPromo').checked;
+            
+            let image = document.getElementById('prodImageBase64').value;
+            
+            if (!name || isNaN(price)) { alert("Preencha Nome e Preço."); return; }
+
+            if (id) {
+                const prod = products.find(p => p.id == id);
+                if (prod) {
+                    if (!image) image = prod.image; // Mantém a imagem antiga se nenhuma nova for enviada
+                    Object.assign(prod, { name, category, price, oldPrice, image, description, isPromo });
+                }
+            } else {
+                if (!image) image = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'; // Imagem padrão caso não selecione
+                products.push({ id: Date.now(), name, category, price, oldPrice, image, description, isPromo });
+            }
+
+            saveProductsToStorage();
+            resetProductForm();
+            renderAdminProductsList();
+            renderPromoCarousel();
+            renderProducts();
+        }
+
+        function editProduct(id) {
+            const prod = products.find(p => p.id == id);
+            if (!prod) return;
+            document.getElementById('editProductId').value = prod.id;
+            document.getElementById('prodName').value = prod.name;
+            document.getElementById('prodCategory').value = prod.category;
+            document.getElementById('prodPrice').value = prod.price;
+            document.getElementById('prodOldPrice').value = prod.oldPrice || '';
+            document.getElementById('prodDescription').value = prod.description;
+            document.getElementById('prodIsPromo').checked = prod.isPromo;
+            document.getElementById('prodImageBase64').value = prod.image; // Carrega a imagem atual oculta
+            document.getElementById('adminFormTitle').innerHTML = '<i class="fa-solid fa-pen text-brand-gold"></i> Editar Produto';
+        }
+
+        function deleteProduct(id) {
+            if (confirm("Excluir produto?")) {
+                products = products.filter(p => p.id != id);
+                saveProductsToStorage();
+                renderAdminProductsList();
+                renderPromoCarousel();
+                renderProducts();
+            }
+        }
+
+        function resetProductForm() {
+            document.getElementById('editProductId').value = '';
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodOldPrice').value = '';
+            document.getElementById('prodImageFile').value = '';
+            document.getElementById('prodImageBase64').value = '';
+            document.getElementById('prodDescription').value = '';
+            document.getElementById('prodIsPromo').checked = false;
+            document.getElementById('adminFormTitle').innerHTML = '<i class="fa-solid fa-plus text-brand-gold"></i> Adicionar Novo Produto';
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
